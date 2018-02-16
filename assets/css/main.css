@@ -31,6 +31,9 @@ body {
   width: 100px;
 }
 
+.blueBtn.changed {
+  background: #b0dfe3;
+}
 .cancelBtn {
   background: #d2d3d4;
   color: #ffffff;
@@ -41,7 +44,7 @@ body {
   width: 100px;
 }
 
-.add {
+.newNote {
   height: 35%;
   width: auto;
 }
