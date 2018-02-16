@@ -5,15 +5,18 @@ const typedTitle = document.querySelector('input[name=title]');
 const typedBody = document.querySelector('textarea');
 const chooseColor = document.querySelector('.e-choose-color');
 const colorBtns = document.querySelectorAll('.color-btn');
-const uId = 0;
+const modalHeaderColor = document.querySelector('.e-color');
+let uId = 0;
 let curChosenColor = '';
 let curNoteId = -1;
 let curIsInEditMode = false;
 
-function editModeHandler(e) {
-  curNoteId = e.target.closest('div.box').id;
-  console.log('15 running', curNoteId);
-  curIsInEditMode = true;
+function savedToNotesData(color, title, body) {
+  savedNotes[curNoteId] = {
+    color,
+    title,
+    body
+  };
 }
 
 function deleteNoteHandler() {
@@ -21,6 +24,8 @@ function deleteNoteHandler() {
   notes.removeChild(curNote);
   closeModalHandler(dModal);
 }
+
+/* Clean Up Add New Note */
 function resetChosenColor() {
   //reset color
   colorBtns.forEach(cur => {
@@ -33,54 +38,40 @@ function resetInputField() {
   typedTitle.value = '';
   typedBody.value = '';
   curChosenColor = '';
-  curNoteId = -1;
+  curNoteId = uId;
+}
+/* Clean Up Add New Note End */
+
+/* Edit mode related */
+function editModeHandler(e) {
+  curNoteId = e.target.closest('div.box').id;
+  console.log('15 running', curNoteId);
+  curIsInEditMode = true;
 }
 
-function savedToNotesData(color, title, body) {
-  savedNotes[curNoteId] = {
-    color,
-    title,
-    body
-  };
-}
-
-//chooseColor
-const colorClickHandler = e => {
-  if (e.target.tagName != 'BUTTON') return;
-  resetChosenColor();
-  e.target.classList.add('selected');
-  curChosenColor = e.target.classList[1];
-};
-chooseColor.addEventListener('click', colorClickHandler);
-
-const closeModalHandler = target => {
-  target.style.display = 'none';
-  resetInputField();
-};
-
-const openModalHandler = target => {
+function toggleConditionalBtn() {
   if (curIsInEditMode) {
-    curIsInEditMode = false;
-    let detail = savedNotes[curNoteId];
-    //add color
-    let color = detail.color;
-    let curColorChoice = document.querySelector(`.color-btn.${color}`);
-    curColorChoice.classList.add('selected');
-    typedTitle.value = detail.title;
-    typedBody.value = detail.body;
+    conditionBtn.classList.remove('addNote');
+    conditionBtn.classList.add('save');
+    conditionBtn.innerHTML = 'Save';
+  } else if (!curIsInEditMode) {
+    conditionBtn.classList.remove('save');
+    conditionBtn.classList.add('addNote');
+    conditionBtn.innerHTML = 'Add';
   }
-  target.style.display = 'block';
-};
+}
 
-let openNewNoteBtn = document.querySelector('.newNote');
-let modal = document.getElementById('addingPage');
-openNewNoteBtn.addEventListener('click', () => openModalHandler(modal));
+function setModalColor(color) {
+  let curColorChoice = document.querySelector(`.color-btn.${color}`);
+  curColorChoice.classList.add('selected');
+  modalHeaderColor.classList.add(color);
+}
 
-let closeModalBtn = document.querySelector('.cancelBtn');
-closeModalBtn.addEventListener('click', () => closeModalHandler(modal));
+function changeBtnColor(target) {
+  if (!target.classList.contains('changed')) target.classList.add('changed');
+}
 
-let addNoteBtn = document.querySelector('.addNote');
-addNoteBtn.addEventListener('click', () => {
+function generateNewSmallNote() {
   let newColor = curChosenColor;
   let newTitle = typedTitle.value;
   let newBody = typedBody.value;
@@ -89,27 +80,87 @@ addNoteBtn.addEventListener('click', () => {
   savedToNotesData(newColor, newTitle, newBody);
   console.log('data saved', savedNotes);
   closeModalHandler(modal);
+}
+
+function updateSmallNote() {
+  let detail = savedNotes[curNoteId];
+  let newColor = curChosenColor || detail.color;
+  let newTitle = typedTitle.value || detail.title;
+  let newBody = typedBody.value || detail.body;
+
+  let curNote = document.getElementById(curNoteId);
+  curNote.firstElementChild.className = `note color ${newColor}`;
+  curNote.querySelector('#pTitle').innerHTML = typedTitle.value;
+  curNote.querySelector('#pBody').innerHTML = typedBody.value;
+
+  savedToNotesData(newColor, newTitle, newBody);
+  curIsInEditMode = false;
+  closeModalHandler(modal);
+  toggleConditionalBtn();
+}
+
+//chooseColor
+const colorClickHandler = e => {
+  if (e.target.tagName != 'BUTTON') return;
+  resetChosenColor();
+  e.target.classList.add('selected');
+  curChosenColor = e.target.classList[1];
+  modalHeaderColor.className = `e-color ${curChosenColor}`;
+};
+chooseColor.addEventListener('click', colorClickHandler);
+
+const closeModalHandler = target => {
+  target.style.display = 'none';
+  resetInputField();
+  curIsInEditMode = false;
+};
+
+const openModalHandler = target => {
+  if (curIsInEditMode) {
+    let detail = savedNotes[curNoteId];
+    toggleConditionalBtn();
+    setModalColor(detail.color);
+    typedTitle.value = detail.title;
+    typedBody.value = detail.body;
+    target.addEventListener('input', () => changeBtnColor(conditionBtn));
+  }
+  target.style.display = 'block';
+};
+
+const openNewNoteBtn = document.querySelector('.newNote');
+const modal = document.getElementById('addingPage');
+openNewNoteBtn.addEventListener('click', () => openModalHandler(modal));
+
+const closeModalBtn = document.querySelector('.cancelBtn');
+closeModalBtn.addEventListener('click', () => closeModalHandler(modal));
+
+const conditionBtn = document.getElementById('modalFooter').lastElementChild;
+conditionBtn.addEventListener('click', e => {
+  if (e.target.innerText === 'Add') generateNewSmallNote();
+  if (e.target.innerText === 'Save') updateSmallNote();
 });
 
-let openDeleNoteBtn = document.querySelector('.trash');
-let dModal = document.getElementById('deleteNote');
+const openDeleNoteBtn = document.querySelector('.trash');
+const dModal = document.getElementById('deleteNote');
 openDeleNoteBtn.addEventListener('click', e => {
   openModalHandler(dModal);
   editModeHandler(e);
 });
 
-let deleNoteBtn = document.querySelector('.d-button.blueBtn');
+const deleNoteBtn = document.querySelector('.d-button.blueBtn');
 deleNoteBtn.addEventListener('click', deleteNoteHandler);
 
-let colseDeleNoteBtn = document.querySelector('.d-button.cancelBtn');
+const colseDeleNoteBtn = document.querySelector('.d-button.cancelBtn');
 colseDeleNoteBtn.addEventListener('click', () => closeModalHandler(dModal));
 
+/* Small note template  */
 function addNewSmallNote(color, title, body) {
-  let uniqueId = uId + 1;
+  console.log('163', uId);
+  uId += 1;
   let box = document.createElement('div');
   box.className = 'box small-note';
-  box.id = uniqueId;
-  curNoteId = box.id;
+  box.id = uId;
+  curNoteId = uId;
 
   let noteColor = document.createElement('div');
   noteColor.className = 'note color';
@@ -118,6 +169,7 @@ function addNewSmallNote(color, title, body) {
   let noteTitle = document.createElement('div');
   noteTitle.className = 'note title';
   let titleName = document.createElement('p');
+  titleName.id = 'pTitle';
   titleName.innerHTML = title;
 
   let editBtnContainer = document.createElement('div');
@@ -155,6 +207,8 @@ function addNewSmallNote(color, title, body) {
   let innerText = document.createElement('div');
   innerText.className = 'note inner';
   let innerTextBody = document.createElement('p');
+  innerTextBody.id = 'pBody';
+
   innerTextBody.innerHTML = body;
 
   innerText.append(innerTextBody);

@@ -32,7 +32,7 @@ body {
 }
 
 .blueBtn.changed {
-  background: #b0dfe3;
+  background: #66c4cc;
 }
 .cancelBtn {
   background: #d2d3d4;
@@ -229,6 +229,10 @@ footer {
   display: flex;
   justify-content: space-between;
   border-radius: 0px 0px 5px 5px;
+}
+
+.save {
+  background: #b0dfe3;
 }
 
 .red {
