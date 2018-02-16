@@ -9,8 +9,8 @@ body {
   justify-content: flex-end;
   align-items: center;
   font-size: 0.9rem;
-  background: #0d1313;
-  color: white;
+  background: #1f2532;
+  color: #ffffff;
   width: 100%;
   height: 50px;
 }
@@ -21,27 +21,42 @@ body {
   order: 2;
 }
 
-.add {
-  background: lightblue;
-  color: white;
-  height: 35%;
+.blueBtn {
+  background: #66c4cc;
+  color: #ffffff;
   margin: 5px;
   padding: 5px;
   border-radius: 5px;
   cursor: pointer;
+  width: 100px;
+}
+
+.cancelBtn {
+  background: #d2d3d4;
+  color: #ffffff;
+  margin: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100px;
+}
+
+.add {
+  height: 35%;
+  width: auto;
 }
 
 /* button */
 .btn {
-  background-color: white;
+  background-color: #ffffff;
   border: none;
-  color: grey;
+  color: #d2d3d4;
   font-size: 16px;
   cursor: pointer;
 }
 
 .btn :hover {
-  color: lightblue;
+  color: #66c4cc;
 }
 
 /*Notes*/
@@ -82,22 +97,22 @@ body {
 .color {
   border-radius: 5px 5px 0px 0px;
   height: 5px;
-  background: lightblue;
+  background: #66c4cc;
 }
 
 .title {
   display: flex;
-  border: 1px solid lightgrey;
+  border: 1px solid #d2d3d4;
   flex-wrap: nowrap;
   align-content: flex-end;
   font-size: 0.9rem;
-  background: white;
+  background: #ffffff;
 }
 
 .main {
-  border: 1px solid lightgrey;
+  border: 1px solid #d2d3d4;
   height: 150px;
-  background: white;
+  background: #ffffff;
   overflow: scroll;
   border-radius: 0px 0px 5px 5px;
 }
@@ -147,18 +162,18 @@ body {
 .e-color {
   border-radius: 5px 5px 0px 0px;
   height: 10px;
-  background: lightblue;
+  background: #66c4cc;
 }
 
 .e-choose-color {
   padding: inherit;
-  /* border: 1px solid lightgrey; */
-  background: white;
+  /* border: 1px solid #d2d3d4; */
+  background: #ffffff;
   display: flex;
 }
 
 .color-btn {
-  border: 1px solid lightgrey;
+  border: 1px solid #d2d3d4;
   margin: 5px;
   width: 20px;
   height: 20px;
@@ -167,14 +182,14 @@ body {
 }
 
 .selected {
-  border: 2px solid blue;
+  border: 2px solid #66c4cc;
 }
 .e-title {
-  background: white;
+  background: #ffffff;
   padding: inherit;
 }
 .e-main {
-  background: white;
+  background: #ffffff;
   padding: inherit;
   height: 60%;
   border-radius: 0px 0px 0px 0px;
@@ -207,7 +222,7 @@ textarea {
 
 footer {
   padding: 20px;
-  background: #f4f2eb;
+  background: #fafafa;
   display: flex;
   justify-content: space-between;
   border-radius: 0px 0px 5px 5px;
@@ -242,11 +257,11 @@ footer {
 .d-title {
   padding-left: 30px;
   border-radius: 5px 5px 0px 0px;
-  background: white;
+  background: #ffffff;
 }
 
 .d-main {
   font-size: 12px;
   padding-left: 30px;
-  background: white;
+  background: #ffffff;
 }
